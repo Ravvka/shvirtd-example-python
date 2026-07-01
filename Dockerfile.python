@@ -15,6 +15,8 @@ COPY --from=build /app /app
 
 ENV PATH=/root/.local/bin:$PATH
 
+RUN ls -R /app/
+
 EXPOSE 5000
 
 # Запускаем приложение с помощью uvicorn, делая его доступным по сети
