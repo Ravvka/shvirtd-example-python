@@ -13,13 +13,14 @@ db_host = os.environ.get('DB_HOST', '127.0.0.1')
 db_user = os.environ.get('DB_USER', 'app')
 db_password = os.environ.get('DB_PASSWORD', 'very_strong')
 db_name = os.environ.get('DB_NAME', 'example')
+db_table_name = os.environ.get('DB_TABLE_NAME', 'requests')
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Код, который выполнится перед запуском приложения
     print("Приложение запускается...")
     if ensure_table_exists():
-        print("Соединение с БД установлено и таблица 'requests' готова к работе.")
+        print(f"Соединение с БД установлено и таблица '{db_table_name}' готова к работе.")
     else:
         print("БД недоступна при старте. Таблица будет создана при первом запросе.")
     
@@ -62,7 +63,7 @@ def ensure_table_exists():
         with get_db_connection() as db:
             cursor = db.cursor()
             create_table_query = f"""
-            CREATE TABLE IF NOT EXISTS {db_name}.requests (
+            CREATE TABLE IF NOT EXISTS {db_name}.{db_table_name} (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 request_date DATETIME,
                 request_ip VARCHAR(255)
@@ -93,7 +94,7 @@ def index(request: Request, ip_address: Optional[str] = Depends(get_client_ip)):
     try:
         with get_db_connection() as db:
             cursor = db.cursor()
-            query = "INSERT INTO requests (request_date, request_ip) VALUES (%s, %s)"
+            query = f"INSERT INTO {db_table_name} (request_date, request_ip) VALUES (%s, %s)"
             values = (current_time, final_ip)
             cursor.execute(query, values)
             db.commit()
@@ -102,7 +103,7 @@ def index(request: Request, ip_address: Optional[str] = Depends(get_client_ip)):
         ensure_table_exists()
         with get_db_connection() as db:
             cursor = db.cursor()
-            query = "INSERT INTO requests (request_date, request_ip) VALUES (%s, %s)"
+            query = f"INSERT INTO {db_table_name} (request_date, request_ip) VALUES (%s, %s)"
             values = (current_time, final_ip)
             cursor.execute(query, values)
             db.commit()
