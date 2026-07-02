@@ -17,7 +17,6 @@ services:
       - DB_NAME=${MYSQL_DATABASE}
       - DB_USER=${MYSQL_USER}
       - DB_PASSWORD=${MYSQL_PASSWORD}
-      - DB_TABLE_NAME=${DB_TABLE_NAME}
 
   db:
     image: mysql:8
