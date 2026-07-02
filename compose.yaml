@@ -6,14 +6,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.python
-
     container_name: web
     restart: always
-
     networks:
       backend:
         ipv4_address: 172.20.0.5
-
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -23,14 +20,11 @@ services:
 
   db:
     image: mysql:8
-
     container_name: db
     restart: unless-stopped
-
     networks:
       backend:
         ipv4_address: 172.20.0.10
-
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
