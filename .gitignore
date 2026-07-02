@@ -1,4 +1,6 @@
 __pycache__/
+venv/
+
 # Compiled files
 *.class
 *.jar
